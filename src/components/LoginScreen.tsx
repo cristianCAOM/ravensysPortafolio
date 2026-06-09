@@ -1,15 +1,62 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
+import { login } from './services/authService';
 import { motion } from 'framer-motion';
-import { Bird, User, Lock } from 'lucide-react';
+import { User, Lock } from 'lucide-react';
 interface LoginScreenProps {
   onLogin: () => void;
 }
-export function LoginScreen({ onLogin }: LoginScreenProps) {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const handleSubmit = (e: React.FormEvent) => {
+export function LoginScreen({
+  onLogin,
+}: LoginScreenProps) {
+
+  const [nombreUsuario, setNombreUsuario] = useState('');
+  const [contrasena, setContrasena] = useState('');
+
+    const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
+
     e.preventDefault();
-    onLogin();
+
+    try {
+
+      const response = await login(
+        nombreUsuario,
+        contrasena
+      );
+
+      const {
+        accessToken,
+        refreshToken,
+        user
+      } = response.data;
+
+      localStorage.setItem(
+        "accessToken",
+        accessToken
+      );
+
+      localStorage.setItem(
+        "refreshToken",
+        refreshToken
+      );
+
+      localStorage.setItem(
+        "user",
+        JSON.stringify(user)
+      );
+
+      onLogin();
+
+    } catch (error) {
+
+      console.error(error);
+
+      alert(
+        "Usuario o contraseña incorrectos"
+      );
+
+    }
   };
   return (
     <motion.div
@@ -57,8 +104,8 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
             </div>
             <input
               type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={nombreUsuario}
+              onChange={(e) => setNombreUsuario(e.target.value)}
               placeholder="Nombre de usuario"
               className="w-full bg-background border border-white/10 rounded-lg py-3 pl-12 pr-4 text-white placeholder:text-muted focus:outline-none focus:border-primary/50 focus:shadow-glow-primary transition-all"
               required />
@@ -71,8 +118,8 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
             </div>
             <input
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={contrasena}
+              onChange={(e) => setContrasena(e.target.value)}
               placeholder="Contraseña"
               className="w-full bg-background border border-white/10 rounded-lg py-3 pl-12 pr-4 text-white placeholder:text-muted focus:outline-none focus:border-primary/50 focus:shadow-glow-primary transition-all"
               required />

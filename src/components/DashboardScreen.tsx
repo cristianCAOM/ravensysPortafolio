@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Header } from './Header';
@@ -13,6 +13,9 @@ export function DashboardScreen() {
   const handleNext = () => {
     setSelectedIndex((prev) => (prev + 1) % modules.length);
   };
+  const user = JSON.parse(
+  localStorage.getItem("user") || "{}"
+);
   return (
     <motion.div
       className="min-h-screen flex flex-col relative overflow-hidden"
@@ -36,12 +39,14 @@ export function DashboardScreen() {
 
       <main className="flex-1 flex flex-col items-center justify-center p-6 relative z-10">
         <div className="text-center mb-4">
+          
           <h2 className="font-orbitron font-bold text-2xl mb-2">
-            Bienvenido, AA
+            Bienvenido, {user?.nombreusuario || "Usuario"}
           </h2>
           <p className="text-muted text-sm">
             Selecciona un módulo para comenzar
           </p>
+
         </div>
 
         <OrbitalSelector
