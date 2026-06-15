@@ -1,10 +1,10 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { modules } from '../data/modules';
 interface ModuleCardProps {
+  modules: any[];
   selectedIndex: number;
 }
-export function ModuleCard({ selectedIndex }: ModuleCardProps) {
+export function ModuleCard({ modules, selectedIndex }: ModuleCardProps) {
   const mod = modules[selectedIndex];
   const Icon = mod.icon;
   return (
@@ -48,6 +48,15 @@ export function ModuleCard({ selectedIndex }: ModuleCardProps) {
             </h3>
             <p className="text-muted text-sm">{mod.description}</p>
           </div>
+          <a
+            href={mod.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-3 inline-block px-4 py-2 rounded-lg"
+            style={{ backgroundColor: mod.color }}
+          >
+            Entrar
+          </a>
         </motion.div>
       </AnimatePresence>
     </div>);

@@ -1,5 +1,5 @@
 ﻿import React, { useState } from 'react';
-import { login } from './services/authService';
+import { login } from '../services/authService';
 import { motion } from 'framer-motion';
 import { User, Lock } from 'lucide-react';
 interface LoginScreenProps {
@@ -9,8 +9,8 @@ export function LoginScreen({
   onLogin,
 }: LoginScreenProps) {
 
-  const [nombreUsuario, setNombreUsuario] = useState('');
-  const [contrasena, setContrasena] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
     const handleSubmit = async (
     e: React.FormEvent<HTMLFormElement>
@@ -21,9 +21,13 @@ export function LoginScreen({
     try {
 
       const response = await login(
-        nombreUsuario,
-        contrasena
+        username,
+        password
       );
+
+      if (!response.data?.accessToken) {
+        throw new Error("No se recibió accessToken");
+        }
 
       const {
         accessToken,
@@ -104,8 +108,8 @@ export function LoginScreen({
             </div>
             <input
               type="text"
-              value={nombreUsuario}
-              onChange={(e) => setNombreUsuario(e.target.value)}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               placeholder="Nombre de usuario"
               className="w-full bg-background border border-white/10 rounded-lg py-3 pl-12 pr-4 text-white placeholder:text-muted focus:outline-none focus:border-primary/50 focus:shadow-glow-primary transition-all"
               required />
@@ -118,8 +122,8 @@ export function LoginScreen({
             </div>
             <input
               type="password"
-              value={contrasena}
-              onChange={(e) => setContrasena(e.target.value)}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               placeholder="Contraseña"
               className="w-full bg-background border border-white/10 rounded-lg py-3 pl-12 pr-4 text-white placeholder:text-muted focus:outline-none focus:border-primary/50 focus:shadow-glow-primary transition-all"
               required />

@@ -23,8 +23,7 @@ export function Header() {
     return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
-  const iniciales = `${user?.nombreusuario?.charAt(0) || ""}${
-    user?.nombreusuario?.charAt(1) || ""
+  const iniciales = `${user?.username?.charAt(0)
   }`.toUpperCase();
 
   const handleLogout = () => {
