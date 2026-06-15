@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Bell, Settings, Bird } from 'lucide-react';
+import { useNavigate } from "react-router-dom";
 
 export function Header() {
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Leer usuario del localStorage cuando se monta el componente
@@ -27,6 +29,8 @@ export function Header() {
   }`.toUpperCase();
 
   const handleLogout = () => {
+    localStorage.clear();
+      navigate("/login");
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("user");

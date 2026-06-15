@@ -2,15 +2,11 @@
 import { login } from '../services/authService';
 import { motion } from 'framer-motion';
 import { User, Lock } from 'lucide-react';
-interface LoginScreenProps {
-  onLogin: () => void;
-}
-export function LoginScreen({
-  onLogin,
-}: LoginScreenProps) {
-
+import { useNavigate } from "react-router-dom";
+export function LoginScreen() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
     const handleSubmit = async (
     e: React.FormEvent<HTMLFormElement>
@@ -44,13 +40,13 @@ export function LoginScreen({
         "refreshToken",
         refreshToken
       );
-
+      navigate("/dashboard");
       localStorage.setItem(
         "user",
         JSON.stringify(user)
       );
 
-      onLogin();
+      navigate("/dashboard");
 
     } catch (error) {
 
