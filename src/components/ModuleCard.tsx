@@ -3,8 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 interface ModuleCardProps {
   modules: any[];
   selectedIndex: number;
+  onOpenModule: (module: any) => void;
 }
-export function ModuleCard({ modules, selectedIndex }: ModuleCardProps) {
+export function ModuleCard({ modules, selectedIndex,onOpenModule }: ModuleCardProps) {
   const mod = modules[selectedIndex];
   const Icon = mod.icon;
   return (
@@ -48,15 +49,13 @@ export function ModuleCard({ modules, selectedIndex }: ModuleCardProps) {
             </h3>
             <p className="text-muted text-sm">{mod.description}</p>
           </div>
-          <a
-            href={mod.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-3 inline-block px-4 py-2 rounded-lg"
-            style={{ backgroundColor: mod.color }}
-          >
-            Entrar
-          </a>
+          <button
+          onClick={() => onOpenModule(mod)}
+          className="mt-3 inline-block px-4 py-2 rounded-lg"
+          style={{ backgroundColor: mod.color }}
+        >
+          Entrar
+        </button>
         </motion.div>
       </AnimatePresence>
     </div>);

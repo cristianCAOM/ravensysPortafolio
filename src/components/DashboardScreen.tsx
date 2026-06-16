@@ -6,9 +6,11 @@ import { OrbitalSelector } from './OrbitalSelector';
 import { ModuleCard } from './ModuleCard';
 import { moduleStyles } from '../data/modules';
 import { getProjects } from '../services/projectsService';
+import AlertMessage from './componentsView/alertMessage';
 export function DashboardScreen() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [modules, setModules] = useState<any[]>([]);
+  const [alertMessage, setAlertMessage] = useState('');
   useEffect(() => {
     const loadProjects = async () => {
       try {
@@ -28,7 +30,7 @@ export function DashboardScreen() {
 
         setModules(projects);
       } catch (error) {
-        console.error('Error al obtener proyectos:', error);
+        // console.error('Error al obtener proyectos:', error);
       }
     };
 
@@ -58,6 +60,24 @@ export function DashboardScreen() {
       </div>
     );
   }
+const handleOpenModule = (module: any) => {
+
+  setAlertMessage(
+    `Accediendo a ${module.name}...`
+  );
+
+  setTimeout(() => {
+    setAlertMessage('');
+  }, 3000);
+
+  setTimeout(() => {
+    window.open(
+      module.url,
+      '_blank',
+      'noopener,noreferrer'
+    );
+  }, 1000);
+};
 
   return (
     <motion.div
@@ -78,9 +98,10 @@ export function DashboardScreen() {
             Bienvenido, {user?.username|| ''}
           </h2>
 
-          <p className="text-muted text-sm">
-            Selecciona un módulo para comenzar
-          </p>
+          <AlertMessage
+            message={alertMessage}
+            severity="info"
+          />
         </div>
 
         <OrbitalSelector
@@ -130,9 +151,10 @@ export function DashboardScreen() {
         </div>
 
         <ModuleCard
-          modules={modules}
-          selectedIndex={selectedIndex}
-        />
+        modules={modules}
+        selectedIndex={selectedIndex}
+        onOpenModule={handleOpenModule}
+      />
       </main>
     </motion.div>
   );

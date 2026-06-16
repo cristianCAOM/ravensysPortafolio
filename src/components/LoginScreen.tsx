@@ -3,9 +3,11 @@ import { login } from '../services/authService';
 import { motion } from 'framer-motion';
 import { User, Lock } from 'lucide-react';
 import { useNavigate } from "react-router-dom";
+import AlertMessage from "./componentsView/alertMessage";
 export function LoginScreen() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
     const handleSubmit = async (
@@ -40,7 +42,7 @@ export function LoginScreen() {
         "refreshToken",
         refreshToken
       );
-      navigate("/dashboard");
+      
       localStorage.setItem(
         "user",
         JSON.stringify(user)
@@ -52,9 +54,10 @@ export function LoginScreen() {
 
       console.error(error);
 
-      alert(
-        "Usuario o contraseña incorrectos"
-      );
+      setErrorMessage(
+    "Usuario o contraseña incorrectos"
+    );
+
 
     }
   };
@@ -132,6 +135,10 @@ export function LoginScreen() {
             
             Iniciar Sesión
           </button>
+          <AlertMessage
+            message={errorMessage}
+            severity="error"
+          />
         </form>
       </div>
     </motion.div>);
