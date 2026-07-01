@@ -16,7 +16,7 @@ export function DashboardScreen() {
       try {
         const response = await getProjects();
 
-        const projects = response.data.map(
+        const projects = response.map(
           (project: any, index: number) => ({
             id: project.id,
             name: project.name,
