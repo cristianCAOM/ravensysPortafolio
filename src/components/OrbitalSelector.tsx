@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Bird } from 'lucide-react';
-import { modules } from '../data/modules';
 interface OrbitalSelectorProps {
+  modules: any[];
   selectedIndex: number;
   onSelect: (index: number) => void;
 }
 export function OrbitalSelector({
+  modules,
   selectedIndex,
   onSelect
 }: OrbitalSelectorProps) {

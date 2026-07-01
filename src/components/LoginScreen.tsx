@@ -1,15 +1,65 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
+import { login } from '../services/authService';
 import { motion } from 'framer-motion';
-import { Bird, User, Lock } from 'lucide-react';
-interface LoginScreenProps {
-  onLogin: () => void;
-}
-export function LoginScreen({ onLogin }: LoginScreenProps) {
+import { User, Lock } from 'lucide-react';
+import { useNavigate } from "react-router-dom";
+import AlertMessage from "./componentsView/alertMessage";
+export function LoginScreen() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const handleSubmit = (e: React.FormEvent) => {
+  const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate();
+
+    const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
+
     e.preventDefault();
-    onLogin();
+
+    try {
+
+      const response = await login(
+        username,
+        password
+      );
+
+      if (!response.data?.accessToken) {
+        throw new Error("No se recibió accessToken");
+        }
+
+      const {
+        accessToken,
+        refreshToken,
+        user
+      } = response.data;
+
+      localStorage.setItem(
+        "accessToken",
+        accessToken
+      );
+
+      localStorage.setItem(
+        "refreshToken",
+        refreshToken
+      );
+      
+      localStorage.setItem(
+        "user",
+        JSON.stringify(user)
+      );
+
+      navigate("/dashboard");
+
+    } catch (error) {
+
+      console.error(error);
+
+      setErrorMessage(
+    "Usuario o contraseña incorrectos"
+    );
+
+
+    }
   };
   return (
     <motion.div
@@ -85,6 +135,10 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
             
             Iniciar Sesión
           </button>
+          <AlertMessage
+            message={errorMessage}
+            severity="error"
+          />
         </form>
       </div>
     </motion.div>);

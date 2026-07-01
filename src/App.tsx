@@ -1,20 +1,40 @@
-import React, { useState } from 'react';
-import { AnimatePresence } from 'framer-motion';
-import { LoginScreen } from './components/LoginScreen';
-import { DashboardScreen } from './components/DashboardScreen';
-import { useScreenInit } from './useScreenInit.js';
+import { Routes, Route, Navigate } from "react-router-dom";
+import { LoginScreen } from "./components/LoginScreen";
+import { DashboardScreen } from "./components/DashboardScreen";
+import { ProjectScreen } from "./components/ProjectScreen";
+
+import ProtectedRoute from "./components/ProtectedRoute";
+
 export function App() {
-  const screenInit = useScreenInit();
-  const [isLoggedIn, setIsLoggedIn] = useState(screenInit.isLoggedIn ?? false);
   return (
-    <div className="w-full min-h-screen bg-background text-white">
-      <AnimatePresence mode="wait">
-        {!isLoggedIn ?
-        <LoginScreen key="login" onLogin={() => setIsLoggedIn(true)} /> :
+    <Routes>
 
-        <DashboardScreen key="dashboard" />
+      <Route
+        path="/login"
+        element={
+          localStorage.getItem("accessToken")
+            ? <Navigate to="/dashboard" replace />
+            : <LoginScreen />
         }
-      </AnimatePresence>
-    </div>);
+      />
 
+      <Route element={<ProtectedRoute />}>
+
+        <Route
+          path="/dashboard"
+          element={<DashboardScreen />}
+        />
+        <Route
+          path="/project"
+          element={<ProjectScreen />}
+        />
+      </Route>
+        
+      <Route
+        path="*"
+        element={<Navigate to="/dashboard" replace />}
+
+      />
+    </Routes>
+  );
 }
